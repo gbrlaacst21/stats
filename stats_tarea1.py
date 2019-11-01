@@ -11,7 +11,7 @@ import numpy as np
 df = pd.read_csv("homicidios.csv", parse_dates=['fecha'], infer_datetime_format = True)
 
 #Veremos el head del dataframe:
-print(df.head())
+#print(df.head())
 
 #Transformar datos
 ###listo, en la misma lectura de csv se transformaron las fechas
@@ -23,16 +23,16 @@ def plot_df(df, x, y, title="", xlabel='Date', ylabel='# de homicidios', dpi=100
     plt.figure(figsize=(16,5), dpi=dpi)
     plt.plot(x, y, color='tab:blue')
     plt.gca().set(title=title, xlabel=xlabel, ylabel=ylabel)
-    #plt.show()
+    plt.show()
 
 plot_df(df, x=df.fecha, y=df.homicidios, title='Homicidios desde 2007')   
 
 #Modelar
 ### (1,1,2) ARIMA model
 #### tercer librería
-model = ARIMA(df.fecha, order=(1,1,2))
+model = ARIMA(df.homicidios, order=(1,1,2))
 model_fit = model.fit(disp=0)
-#print(model_fit.summary())
+print(model_fit.summary())
 
 #residuos
 residuals = pd.DataFrame(model_fit.resid)
@@ -52,10 +52,9 @@ residuals.plot(kind='kde', title='Density', ax=ax[1])
 
 
 
-model_fit.plot_predict(start = datetime.datetime('2007-01-01 00:00:00'), 
-	end = datetime.datetime('2007-01-01 00:00:00'),
+model_fit.plot_predict(
 	dynamic = False)
-#plt.show()
+plt.show()
 
 #Obtener gráfica con proyección
 
